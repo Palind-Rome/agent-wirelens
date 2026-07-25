@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="https://github.com/Palind-Rome/agent-wirelens/actions/workflows/test.yml"><img src="https://img.shields.io/github/actions/workflow/status/Palind-Rome/agent-wirelens/test.yml?branch=main&logo=githubactions&logoColor=white&label=Tests" alt="Tests" /></a>
-  <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/Node.js-%E2%89%A518-339933?logo=nodedotjs&logoColor=white" alt="Node.js 18 or newer" /></a>
+  <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/Node.js-%E2%89%A520-339933?logo=nodedotjs&logoColor=white" alt="Node.js 20 or newer" /></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-5b6cf0" alt="MIT License" /></a>
   <a href="https://github.com/Palind-Rome/agent-wirelens"><img src="https://img.shields.io/github/stars/Palind-Rome/agent-wirelens?style=social" alt="GitHub stars" /></a>
 </p>
@@ -63,7 +63,7 @@ WireLens 不展示 TLS record，也无法观察上游负载均衡器之后的内
 
 ## 环境要求
 
-- Node.js 18 或更新版本。
+- Node.js 20 或更新版本。
 - Claude Code 使用 Anthropic Messages API provider。
 - 上游实现 Anthropic-compatible Messages API。
 

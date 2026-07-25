@@ -293,6 +293,10 @@ export function createWireLensServer(config) {
       closeProxyAgents()
       return new Promise((resolve, reject) => {
         server.close(error => (error ? reject(error) : resolve()))
+        // Before Node 19, server.close() did not reap idle keep-alive
+        // connections. A browser or fetch client could therefore keep the
+        // process alive indefinitely after WireLens had otherwise shut down.
+        server.closeIdleConnections?.()
       })
     },
   }

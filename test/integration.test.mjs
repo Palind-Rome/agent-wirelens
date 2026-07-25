@@ -1,6 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import http from 'node:http'
+import net from 'node:net'
 import os from 'node:os'
 import path from 'node:path'
 import { once } from 'node:events'
@@ -205,10 +206,9 @@ test('proxy retains partial bytes when the upstream aborts mid-stream', async t 
 
 test('capture does not complete before a slow client finishes its request body', async t => {
   const upstream = http.createServer((request, response) => {
-    request.once('data', () => {
-      response.writeHead(401, { 'content-type': 'application/json' })
-      response.end('{"error":"early"}')
-    })
+    request.resume()
+    response.writeHead(401, { 'content-type': 'application/json' })
+    response.end('{"error":"early"}')
   })
   const upstreamPort = await listen(upstream)
   t.after(() => new Promise(resolve => upstream.close(resolve)))
@@ -227,30 +227,36 @@ test('capture does not complete before a slow client finishes its request body',
   t.after(() => wirelens.close())
   const port = wirelens.server.address().port
 
-  let responseFinished
+  // Use a raw chunked request here. Node 18's http.ClientRequest does not
+  // consistently surface an early response until request.end(), which would
+  // make the test validate the client implementation instead of the proxy.
+  const socket = net.connect(port, '127.0.0.1')
+  await once(socket, 'connect')
+  t.after(() => socket.destroy())
   const responseDone = new Promise(resolve => {
-    responseFinished = resolve
+    let responseText = ''
+    socket.on('data', chunk => {
+      responseText += chunk.toString('utf8')
+      if (responseText.includes('{"error":"early"}')) resolve()
+    })
   })
-  const clientRequest = http.request(
-    {
-      host: '127.0.0.1',
-      port,
-      path: '/v1/messages',
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-    },
-    response => {
-      response.resume()
-      response.on('end', responseFinished)
-    },
+  socket.write(
+    [
+      'POST /v1/messages HTTP/1.1',
+      `Host: 127.0.0.1:${port}`,
+      'Content-Type: application/json',
+      'Transfer-Encoding: chunked',
+      '',
+      '',
+    ].join('\r\n'),
   )
-  clientRequest.write('{"first":')
+  socket.write('9\r\n{"first":\r\n')
   await responseDone
 
   assert.equal(wirelens.store.list()[0].state, 'in_flight')
   assert.equal(wirelens.store.get(wirelens.store.list()[0].id)._rawRequest, undefined)
 
-  clientRequest.end('"second"}')
+  socket.write('9\r\n"second"}\r\n0\r\n\r\n')
   for (let attempt = 0; attempt < 20; attempt += 1) {
     if (wirelens.store.list()[0]?.state !== 'in_flight') break
     await new Promise(resolve => setTimeout(resolve, 5))
