@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="./public/favicon.svg" alt="Agent WireLens" width="120" />
+  <img src="./public/Logo.png" alt="Agent WireLens" width="120" />
 </p>
 
-<h2 align="center">Agent WireLens</h2>
+<h2 align="center"><img src="./public/favicon.svg" alt="Agent WireLens" width="18" /> Agent WireLens</h2>
 
 <p align="center">
   <a href="https://github.com/Palind-Rome/agent-wirelens/actions/workflows/test.yml"><img src="https://img.shields.io/github/actions/workflow/status/Palind-Rome/agent-wirelens/test.yml?branch=main&logo=githubactions&logoColor=white&label=Tests" alt="Tests" /></a>
@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  看清 Claude Code 真正发给模型的请求，也看清 agent 如何协作。<br/>
+  反向网关实验台，为了看清楚 Claude Code 发的啥请求与相应。
   一个面向 <strong>Anthropic Messages、SSE、subagent 与 Agent Team</strong> 的本地协议观测台。
 </p>
 
