@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./public/Logo.png" alt="Agent WireLens" width="120" />
+  <img src="./public/Logo.png" alt="Agent WireLens" width="500" />
 </p>
 
 <h2 align="center"><img src="./public/favicon.svg" alt="Agent WireLens" width="18" /> Agent WireLens</h2>
