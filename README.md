@@ -12,8 +12,7 @@
 </p>
 
 <p align="center">
-  反向网关实验台，为了看清楚 Claude Code 发的啥请求与相应。
-  一个面向 <strong>Anthropic Messages、SSE、subagent 与 Agent Team</strong> 的本地协议观测台。
+  反向网关实验台，为了看清楚 Claude Code 发的啥请求与相应。面向 <strong>Anthropic Messages、SSE、subagent 与 Agent Team</strong>。
 </p>
 
 ---
